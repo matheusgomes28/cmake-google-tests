@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/matheus/development/gtest/conan/build/src/multiply",
+  "command": "/usr/bin/c++   -I/home/matheus/development/gtest/conan/src/multiply/include    -std=c++17 -o CMakeFiles/multiply.dir/multiply.cpp.o -c /home/matheus/development/gtest/conan/src/multiply/multiply.cpp",
+  "file": "/home/matheus/development/gtest/conan/src/multiply/multiply.cpp"
+},
+{
+  "directory": "/home/matheus/development/gtest/conan/build/tests",
+  "command": "/usr/bin/c++   -I/home/matheus/development/gtest/conan/src/multiply/include -isystem /home/matheus/.conan/data/gtest/1.10.0/_/_/package/7320405f83ec32d8556b524cdda87ee295bb7b84/include    -std=c++17 -o CMakeFiles/multiply_test.dir/multiply_test.cpp.o -c /home/matheus/development/gtest/conan/tests/multiply_test.cpp",
+  "file": "/home/matheus/development/gtest/conan/tests/multiply_test.cpp"
+}
+]
