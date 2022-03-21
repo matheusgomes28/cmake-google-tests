@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euxo pipefail
+set -euo pipefail
 
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 PROJECT_DIR="$(dirname "${SCRIPT_DIR}")"
@@ -21,7 +21,10 @@ cmake -S "${PROJECT_DIR}" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cmake --build ${BUILD_DIR} -j4
-
 cp -p "${BUILD_DIR}/compile_commands.json" "${PROJECT_DIR}"
-echo "Build Finished"
 
+# Run the tests
+cd build
+GTEST_COLOR=1 ctest --verbose
+
+echo "Build Finished"

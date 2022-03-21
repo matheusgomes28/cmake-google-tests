@@ -11,15 +11,20 @@ echo "BUILD_DIR: ${BUILD_DIR}"
 
 mkdir -p "${BUILD_DIR}"
 
-/home/matheus/development/vcpkg/vcpkg install \
+${VCPKG_INSTALL_DIR}/vcpkg install \
   --x-manifest-root="${PROJECT_DIR}" \
   --x-install-root="${BUILD_DIR}"
 
 cmake -S "${PROJECT_DIR}" \
   -B "${BUILD_DIR}" \
+  -DCMAKE_TOOLCHAIN_FILE="${VCPKG_INSTALL_DIR}/scripts/buildsystems/vcpkg.cmake" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-cmake --build ${BUILD_DIR} -j4
-
+cmake --build "${BUILD_DIR}" -j4
 cp -p "${BUILD_DIR}/compile_commands.json" "${PROJECT_DIR}"
-echo "Build Finished !!!!!!"
+
+# Run tests
+cd "${BUILD_DIR}"
+GTEST_COLOR=1 ctest --verbose
+
+echo "Build Finished"
