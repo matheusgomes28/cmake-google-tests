@@ -39,18 +39,19 @@ stages:
       displayName: Linting CPP files
       workingDirectory: $(Build.SourcesDirectory)
 
-- stage: 'build'
-  displayName: 'Build Project'
+- stage: build
+  displayName: Build
   dependsOn:
     - failfast
 
   jobs:
   - template: scripts/pipeline/ubuntu_build.yml
     parameters:
-      jobName: ubuntu_build_x86_64_debug
+      jobName: ubuntu_build_x86_64_fetch
       buildType: Debug
       cmakePreset: unix-deb
       containerName: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+      sourceDir: $(Build.SourcesDirectory)/fetch-content
 
 
 - stage: tests
@@ -65,10 +66,11 @@ stages:
       - template: scripts/pipeline/download_build.yml
         parameters:
           artifactName: UbuntuDebugBuild
-          destination: $(Build.SourcesDirectory)/build
+          destination: $(Build.SourcesDirectory)/fetch-content/build
 
       - bash: |
           set -euo pipefail
-          cd "build/unix-deb" && ctest --verbose --test-dir="build/unix-deb"
+          cd "fetch-content/build/unix-deb" || exit
+          ctest --verbose --test-dir="build/unix-deb"
         displayName: Running All Tests
         workingDirectory: $(Build.SourcesDirectory)

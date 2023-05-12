@@ -10,7 +10,7 @@ parameters:
   default: Debug
 - name: cmakePreset
   type: string
-- name: cmakeExtraArgs
+- name: sourceDir
   type: string
   default:
 - name: containerName
@@ -23,19 +23,23 @@ jobs:
   continueOnError: false
   container: ${{ parameters.containerName }}
   steps:
+    - task: CopyFiles@2
+      displayName: Copy Helper Files
+      inputs:
+        Contents: |
+          CMakePresets.json
+          scripts/**/*
+        TargetFolder: ${{parameters.sourceDir}}
+    
     - bash: |
         set -euo pipefail
-        scripts/build_x86-64.sh ${{ parameters.cmakePreset }} ${{ parameters.cmakeExtraArgs }}
+        cd ${{ parameters.sourceDir }}|| exit
+        scripts/build_x86-64.sh ${{ parameters.cmakePreset }}
       displayName: Compile Code & Tests
-
-    - bash: |
-        set -euo pipefail
-        scripts/cmake-install.sh ${{ parameters.cmakePreset }}
-      displayName: Install Library
 
     - task: PublishBuildArtifacts@1
       displayName: Publishing Build Files
       inputs:
-        PathToPublish: $(Build.SourcesDirectory)/build
+        PathToPublish: ${{ parameters.sourceDir }}/build
         ArtifactName: Ubuntu${{ parameters.buildType }}Build
         StoreAsTar: true
