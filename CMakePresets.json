@@ -1,0 +1,106 @@
+{
+    "version": 2,
+    "configurePresets": [
+        {
+            "name": "conan-deb",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/conan/deb/conan_toolchain.cmake"
+            }
+        },
+        {
+            "name": "rel",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "deb",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "BUILD_TESTS": true
+            }
+        },
+        {
+            "name": "unix",
+            "hidden": true,
+            "generator": "Unix Makefiles",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "$env{CMAKE_CXX_FLAGS} -Werror -Wall -Wextra -pedantic"
+            }
+        },
+        {
+            "name": "vs2022",
+            "hidden": true,
+            "generator": "Visual Studio 17 2022",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "$env{CMAKE_CXX_FLAGS} /W4 /WX /EHsc"
+            }
+        },
+
+        {
+            "name": "unix-rel",
+            "displayName": "Unix Make Release",
+            "binaryDir": "${sourceDir}/build/unix-rel",
+            "inherits": ["unix", "rel"],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/unix-rel/install"
+            }
+        },
+        {
+            "name": "unix-deb",
+            "displayName": "Unix Make Debug",
+            "binaryDir": "${sourceDir}/build/unix-deb",
+            "inherits": ["unix", "deb"],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/unix-deb/install"
+            }
+        },
+        {
+            "name": "vs2022-rel",
+            "displayName": "Visual Studio 2022 Release",
+            "binaryDir": "${sourceDir}/build/vs2022-rel",
+            "inherits": ["vs2022", "rel"],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/vs2022-rel/install"
+            }
+        },
+        {
+            "name": "vs2022-deb",
+            "displayName": "Visual Studio 2022 Debug",
+            "binaryDir": "${sourceDir}/build/vs2022-deb",
+            "inherits": ["vs2022", "deb"],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/vs2022-deb/install"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "vs2022-rel",
+            "displayName": "Visual Studio 2022 Release Build",
+            "configurePreset": "vs2022-rel",
+            "configuration": "Release"
+        },
+        {
+            "name": "vs2022-deb",
+            "displayName": "Visual Studio 2022 Debug Build",
+            "configurePreset": "vs2022-deb",
+            "configuration": "Debug"
+        },
+        {
+            "name": "unix-deb",
+            "displayName": "Unix Make Debug Build",
+            "configurePreset": "unix-deb",
+            "configuration": "Debug"
+        },
+        {
+            "name": "unix-rel",
+            "displayName": "Unix Make Release Build",
+            "configurePreset": "unix-rel",
+            "configuration": "Release"
+        }
+    ]
+}

@@ -1,0 +1,74 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+#
+
+trigger:
+  branches:
+    include:
+    - main
+    - releases/*
+pr:
+  - main
+  - releases/*
+
+pool:
+  vmImage: ubuntu-latest
+
+resources:
+  containers:
+    - container: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+      image: mattgomes28/cpp-ubuntu-bionic:0.11
+      options: --user 0:0
+
+stages:
+
+- stage: failfast
+  displayName: FailFast Checks
+  jobs:
+  - job: failfast
+    displayName: Failfast Scripts
+    container: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+    continueOnError: false
+    steps:
+    - bash: scripts/shellcheck.sh
+      displayName: Linting Shell
+      workingDirectory: $(Build.SourcesDirectory)
+    - bash: scripts/cpp-lint.sh
+      displayName: Linting CPP files
+      workingDirectory: $(Build.SourcesDirectory)
+
+- stage: 'build'
+  displayName: 'Build Project'
+  dependsOn:
+    - failfast
+
+  jobs:
+  - template: scripts/pipeline/ubuntu_build.yml
+    parameters:
+      jobName: ubuntu_build_x86_64_debug
+      buildType: Debug
+      cmakePreset: unix-deb
+      containerName: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+
+
+- stage: tests
+  displayName: Running Tests
+  dependsOn:
+    - build
+  jobs:
+  - job:
+    container: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+    displayName: Ubuntu Tests
+    steps:
+      - template: scripts/pipeline/download_build.yml
+        parameters:
+          artifactName: UbuntuDebugBuild
+          destination: $(Build.SourcesDirectory)/build
+
+      - bash: |
+          set -euo pipefail
+          cd "build/unix-deb" && ctest --verbose --test-dir="build/unix-deb"
+        displayName: Running All Tests
+        workingDirectory: $(Build.SourcesDirectory)
