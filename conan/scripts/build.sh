@@ -11,8 +11,8 @@ echo "BUILD_DIR: ${BUILD_DIR}"
 
 mkdir -p "${BUILD_DIR}"
 
-conan install ${PROJECT_DIR} \
-    -if ${BUILD_DIR} \
+conan install "${PROJECT_DIR}" \
+    -if "${BUILD_DIR}" \
     --build=missing
 
 cmake -S "${PROJECT_DIR}" \
@@ -20,7 +20,7 @@ cmake -S "${PROJECT_DIR}" \
   -DCMAKE_MODULE_PATH="${BUILD_DIR}" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-cmake --build ${BUILD_DIR} -j4
+cmake --build "${BUILD_DIR}" -j4
 cp -p "${BUILD_DIR}/compile_commands.json" "${PROJECT_DIR}"
 
 # Run the tests

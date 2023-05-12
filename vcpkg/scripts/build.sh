@@ -11,6 +11,7 @@ echo "BUILD_DIR: ${BUILD_DIR}"
 
 mkdir -p "${BUILD_DIR}"
 
+# shellcheck disable=SC2086,SC2068
 ${VCPKG_INSTALL_DIR}/vcpkg install \
   --x-manifest-root="${PROJECT_DIR}" \
   --x-install-root="${BUILD_DIR}"
