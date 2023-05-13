@@ -47,9 +47,17 @@ stages:
   jobs:
   - template: scripts/pipeline/ubuntu_build.yml
     parameters:
-      jobName: ubuntu_build_x86_64_fetch
+      jobName: ubuntu_build_x86_64_fetch_debug
       buildType: Debug
       cmakePreset: unix-deb
+      containerName: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+      sourceDir: $(Build.SourcesDirectory)/fetch-content
+
+  - template: scripts/pipeline/ubuntu_build.yml
+    parameters:
+      jobName: ubuntu_build_x86_64_fetch_release
+      buildType: Release
+      cmakePreset: unix-rel
       containerName: ubuntu18.04-gcc11-conan2-doxygen1.9.6
       sourceDir: $(Build.SourcesDirectory)/fetch-content
 
