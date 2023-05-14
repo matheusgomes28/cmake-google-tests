@@ -22,7 +22,7 @@ CMAKE_EXTRA_ARGS=${@:2}
 
 # we want to expand the variables here
 # to pass onto cmake
-# shellcheck disable=SC2068,SC2086
+# shellcheck disable=SC2068
 cmake --preset "${CMAKE_PRESET}" -DCMAKE_EXPORT_COMPILE_COMMANDS=On ${CMAKE_EXTRA_ARGS}
 
 cmake --build --preset "${CMAKE_PRESET}" -j"$(nproc)"

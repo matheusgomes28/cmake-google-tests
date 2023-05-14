@@ -1,0 +1,34 @@
+# Template for the test job. This will download
+# build pipelines from the artifact given, place
+# it in the correct build sirectory and run all
+# tests.
+
+parameters:
+- name: displayName
+  type: string
+- name: cmakePreset
+  type: string
+- name: containerName
+  type: string
+- name: sourceDir
+  type: string
+- name: artifactName
+  type: string
+
+
+jobs:
+  - job:
+    displayName: ${{ parameters.displayName }}
+    container: ${{ parameters.containerName }}
+    steps:
+      - template: download_build.yml
+        parameters:
+          artifactName: CmakeDebugBuild
+          destination: ${{ parameters.sourceDir }}/build
+
+      - bash: |
+          set -euo pipefail
+          cd "build/${{ parameters.cmakePreset }}" || exit
+          ctest --verbose --test-dir="${{ parameters.sourceDir }}/build/${{ parameters.cmakePreset }}"
+        displayName: Running All Tests
+        workingDirectory: ${{ parameters.sourceDir }}
