@@ -80,22 +80,24 @@ stages:
       preBuildCommand: ./scripts/helpers/conan-install.sh Debug
 
 - stage: tests
-  displayName: Running Tests
+  displayName: Running Ubuntu Tests
   dependsOn:
     - build_cmake
+    - build_conan
   jobs:
-  - job:
-    container: ubuntu18.04-gcc11-conan2-doxygen1.9.6
-    displayName: Ubuntu Tests
-    steps:
-      - template: scripts/pipeline/download_build.yml
-        parameters:
-          artifactName: CmakeDebugBuild
-          destination: $(Build.SourcesDirectory)/fetch-content/build
+  - template: scripts/pipeline/ubuntu_test.yml
+    parameters:
+      displayName: CMake Fetch* Tests
+      cmakePreset: unix-deb
+      containerName: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+      sourceDir: $(Build.SourcesDirectory)/fetch-content
+      artifactName: CmakeDebugBuild
 
-      - bash: |
-          set -euo pipefail
-          cd "fetch-content/build/unix-deb" || exit
-          ctest --verbose --test-dir="build/unix-deb"
-        displayName: Running All Tests
-        workingDirectory: $(Build.SourcesDirectory)
+  - template: scripts/pipeline/ubuntu_test.yml
+    parameters:
+      displayName: Conan Tests
+      cmakePreset: unix-deb
+      containerName: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+      sourceDir: $(Build.SourcesDirectory)/conan
+      artifactName: ConanDebugBuild
+      
