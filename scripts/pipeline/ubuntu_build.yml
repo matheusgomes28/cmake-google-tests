@@ -1,7 +1,7 @@
 # This is the template for a single Ubuntu
 # build job. This template will publish the
 # build artifact with name
-# ubuntu-x86-64-${{ parameters.buildType }}.tar.gz
+# ${{ parameters.artifactName }}
 parameters:
 - name: jobName
   type: string
@@ -10,11 +10,15 @@ parameters:
   default: Debug
 - name: cmakePreset
   type: string
-- name: sourceDir
-  type: string
-  default:
 - name: containerName
   type: string
+- name: sourceDir
+  type: string
+- name: artifactName
+  type: string
+- name: preBuildCommand
+  type: string
+  default:
 
 
 jobs:
@@ -30,6 +34,11 @@ jobs:
           CMakePresets.json
           scripts/**/*
         TargetFolder: ${{parameters.sourceDir}}
+
+    - ${{ if not(eq(parameters.preBuildCommand, '')) }}:
+      - bash: ${{ parameters.preBuildCommand }}
+        displayName: Pre-Build Command
+        workingDirectory: ${{ parameters.sourceDir }}
     
     - bash: |
         set -euo pipefail
@@ -41,5 +50,5 @@ jobs:
       displayName: Publishing Build Files
       inputs:
         PathToPublish: ${{ parameters.sourceDir }}/build
-        ArtifactName: Ubuntu${{ parameters.buildType }}Build
+        ArtifactName: ${{ parameters.artifactName }}
         StoreAsTar: true

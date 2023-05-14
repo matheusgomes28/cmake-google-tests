@@ -59,6 +59,15 @@
             }
         },
         {
+            "name": "unix-deb-conan",
+            "displayName": "Unix Make Debug Conan",
+            "binaryDir": "${sourceDir}/build/unix-deb-conan",
+            "inherits": ["unix", "deb", "conan-deb"],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/unix-deb-conan/install"
+            }
+        },
+        {
             "name": "vs2022-rel",
             "displayName": "Visual Studio 2022 Release",
             "binaryDir": "${sourceDir}/build/vs2022-rel",
@@ -94,6 +103,12 @@
             "name": "unix-deb",
             "displayName": "Unix Make Debug Build",
             "configurePreset": "unix-deb",
+            "configuration": "Debug"
+        },
+        {
+            "name": "unix-deb-conan",
+            "displayName": "Unix Make Debug Build Conan",
+            "configurePreset": "unix-deb-conan",
             "configuration": "Debug"
         },
         {
