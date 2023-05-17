@@ -19,7 +19,7 @@ pool:
 resources:
   containers:
     - container: ubuntu18.04-gcc11-conan2-doxygen1.9.6
-      image: mattgomes28/cpp-ubuntu-bionic:0.11
+      image: mattgomes28/cpp:0.0
       options: --user 0:0
 
 stages:
@@ -79,11 +79,27 @@ stages:
       artifactName: ConanDebugBuild
       preBuildCommand: ./scripts/helpers/conan-install.sh Debug
 
+- stage: build_vcpkg
+  displayName: Build Vcpkg
+  dependsOn:
+    - failfast
+  jobs:
+  - template: scripts/pipeline/ubuntu_build.yml
+    parameters:
+      jobName: ubuntu_build_x86_64_vcpkg_debug
+      buildType: Debug
+      cmakePreset: unix-deb-vcpkg
+      containerName: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+      sourceDir: $(Build.SourcesDirectory)/vcpkg
+      artifactName: VcpkgDebugBuild
+      preBuildCommand: ./scripts/helpers/vcpkg-install.sh Debug
+
 - stage: tests
   displayName: Running Ubuntu Tests
   dependsOn:
     - build_cmake
     - build_conan
+    - build_vcpkg
   jobs:
   - template: scripts/pipeline/ubuntu_test.yml
     parameters:
@@ -96,8 +112,16 @@ stages:
   - template: scripts/pipeline/ubuntu_test.yml
     parameters:
       displayName: Conan Tests
-      cmakePreset: unix-deb
+      cmakePreset: unix-deb-conan
       containerName: ubuntu18.04-gcc11-conan2-doxygen1.9.6
       sourceDir: $(Build.SourcesDirectory)/conan
       artifactName: ConanDebugBuild
+
+  - template: scripts/pipeline/ubuntu_test.yml
+    parameters:
+      displayName: Vcpkg Tests
+      cmakePreset: unix-deb-vcpkg
+      containerName: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+      sourceDir: $(Build.SourcesDirectory)/vcpkg
+      artifactName: VcpkgDebugBuild
       
