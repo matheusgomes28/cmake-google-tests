@@ -23,7 +23,7 @@ jobs:
     steps:
       - template: download_build.yml
         parameters:
-          artifactName: CmakeDebugBuild
+          artifactName: ${{ parameters.artifactName }}
           destination: ${{ parameters.sourceDir }}/build
 
       - bash: |

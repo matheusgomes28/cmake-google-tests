@@ -9,6 +9,13 @@
             }
         },
         {
+            "name": "vcpkg",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+        },
+        {
             "name": "rel",
             "hidden": true,
             "cacheVariables": {
@@ -68,6 +75,15 @@
             }
         },
         {
+            "name": "unix-deb-vcpkg",
+            "displayName": "Unix Make Debug Vcpkg",
+            "binaryDir": "${sourceDir}/build/unix-deb-vcpkg",
+            "inherits": ["unix", "deb", "vcpkg"],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/unix-deb-vcpkg/install"
+            }
+        },
+        {
             "name": "vs2022-rel",
             "displayName": "Visual Studio 2022 Release",
             "binaryDir": "${sourceDir}/build/vs2022-rel",
@@ -109,6 +125,12 @@
             "name": "unix-deb-conan",
             "displayName": "Unix Make Debug Build Conan",
             "configurePreset": "unix-deb-conan",
+            "configuration": "Debug"
+        },
+        {
+            "name": "unix-deb-vcpkg",
+            "displayName": "Unix Make Debug Build Vcpkg",
+            "configurePreset": "unix-deb-vcpkg",
             "configuration": "Debug"
         },
         {
