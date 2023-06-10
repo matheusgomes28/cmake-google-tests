@@ -9,6 +9,13 @@
             }
         },
         {
+            "name": "conan-rel",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/conan/rel/conan_toolchain.cmake"
+            }
+        },
+        {
             "name": "vcpkg",
             "hidden": true,
             "cacheVariables": {
@@ -75,6 +82,15 @@
             }
         },
         {
+            "name": "unix-rel-conan",
+            "displayName": "Unix Make Release Conan",
+            "binaryDir": "${sourceDir}/build/unix-rel-conan",
+            "inherits": ["unix", "rel", "conan-rel"],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/unix-rel-conan/install"
+            }
+        },
+        {
             "name": "unix-deb-vcpkg",
             "displayName": "Unix Make Debug Vcpkg",
             "binaryDir": "${sourceDir}/build/unix-deb-vcpkg",
@@ -126,6 +142,12 @@
             "displayName": "Unix Make Debug Build Conan",
             "configurePreset": "unix-deb-conan",
             "configuration": "Debug"
+        },
+        {
+            "name": "unix-rel-conan",
+            "displayName": "Unix Make Release Build Conan",
+            "configurePreset": "unix-rel-conan",
+            "configuration": "Release"
         },
         {
             "name": "unix-deb-vcpkg",
