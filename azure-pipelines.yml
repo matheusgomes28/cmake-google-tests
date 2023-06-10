@@ -78,6 +78,15 @@ stages:
       sourceDir: $(Build.SourcesDirectory)/conan
       artifactName: ConanDebugBuild
       preBuildCommand: ./scripts/helpers/conan-install.sh Debug
+  - template: scripts/pipeline/ubuntu_build.yml
+    parameters:
+      jobName: ubuntu_build_x86_64_conan_release
+      buildType: Release
+      cmakePreset: unix-rel-conan
+      containerName: ubuntu18.04-gcc11-conan2-doxygen1.9.6
+      sourceDir: $(Build.SourcesDirectory)/conan
+      artifactName: ConanReleaseBuild
+      preBuildCommand: ./scripts/helpers/conan-install.sh Release
 
 - stage: build_vcpkg
   displayName: Build Vcpkg
