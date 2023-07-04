@@ -12,13 +12,13 @@ echo "BUILD_DIR: ${BUILD_DIR}"
 mkdir -p "${BUILD_DIR}"
 
 # shellcheck disable=SC2086,SC2068
-${VCPKG_INSTALL_DIR}/vcpkg install \
+${VCPKG_ROOT}/vcpkg install \
   --x-manifest-root="${PROJECT_DIR}" \
   --x-install-root="${BUILD_DIR}"
 
 cmake -S "${PROJECT_DIR}" \
   -B "${BUILD_DIR}" \
-  -DCMAKE_TOOLCHAIN_FILE="${VCPKG_INSTALL_DIR}/scripts/buildsystems/vcpkg.cmake" \
+  -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 cmake --build "${BUILD_DIR}" -j4
